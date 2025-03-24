@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}">
+</head>
+<body>
+    <h1>Drivers</h1>
+    <br>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th>Phonenumber</th>
+                <th>Role</th>
+                <th>Admin name</th>
+                <th>Ride Count</th>
+                <th>Vehicle Info</th>
+            </tr>
+            
+        </thead>
+        <tbody>
+            <tr th:each="driver : ${drivers}">
+                <td th:text="${driver.username}"></td>
+                <td th:text="${driver.firstname}"></td>
+                <td th:text="${driver.lastname}"></td>
+                <td th:text="${driver.email}"></td>
+                <td th:text="${driver.phoneNumber}"></td>
+                <td th:text="${driver.role}"></td>
+                <td th:text="${driver.admin != null ? driver.admin.firstname + ' ' + driver.admin.lastname : 'None'}"></td>
+                <td th:text="${driver.rides.size()}"></td>
+                <td th:text="${driver.vehicle != null ? driver.vehicle.licensePlate : 'None'}"></td>
+                
+            </tr>
+        </tbody>
+    </table>
+    
+</body>
+</html>

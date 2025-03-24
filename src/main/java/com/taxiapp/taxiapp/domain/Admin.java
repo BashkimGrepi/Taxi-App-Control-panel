@@ -6,6 +6,8 @@ import com.taxiapp.taxiapp.enums.Role;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,9 +19,12 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long adminId;
 
+    private String firstname;
+    private String lastname;
     private String username;
     private String password;
     private String email;
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "admin")
@@ -28,7 +33,9 @@ public class Admin {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "admin" )
     private List<Driver> drivers;
 
-    public Admin(String username, String password, String email, Role role, List<User> users, List<Driver> drivers) {
+    public Admin(String firstname, String lastname, String username, String password, String email, Role role, List<User> users, List<Driver> drivers) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -48,6 +55,21 @@ public class Admin {
         adminId = id;
     }
 
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
     public String getUsername() {
         return username;
     }

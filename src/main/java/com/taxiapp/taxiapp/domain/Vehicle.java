@@ -3,6 +3,8 @@ package com.taxiapp.taxiapp.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.GenerationType;
 
 @Entity
@@ -14,6 +16,10 @@ public class Vehicle {
 
     private String model;
     private String licensePlate;
+
+    @OneToOne
+    @JoinColumn(name = "driverId")
+    private Driver driver;
     public Vehicle() {
     }
 
