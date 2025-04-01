@@ -27,6 +27,7 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Role role;
     
@@ -43,10 +44,11 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String email, Role role, Admin admin, List<Ride> rides) {
+    public User(String username, String password, String email, String phoneNumber, Role role, Admin admin, List<Ride> rides) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.role = role;
         this.admin = admin;
         this.rides = rides;
@@ -109,6 +111,13 @@ public class User {
         this.rides = rides;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
     @Override
     public String toString() {
         return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", email=" + email

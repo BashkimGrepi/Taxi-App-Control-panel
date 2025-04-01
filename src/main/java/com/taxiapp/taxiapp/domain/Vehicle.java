@@ -23,9 +23,10 @@ public class Vehicle {
     public Vehicle() {
     }
 
-    public Vehicle(String model, String licensePlate) {
+    public Vehicle(String model, String licensePlate, Driver driver) {
         this.model = model;
         this.licensePlate = licensePlate;
+        this.driver = driver;
     }
 
     public Long getVehicleId() {

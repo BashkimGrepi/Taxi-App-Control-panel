@@ -18,6 +18,6 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    //this can be only shown for admin
+ 
    
 }

@@ -13,6 +13,7 @@
 
 
             <form action="/admin/drivers/add" method="post" th:object="${driver}" class="needs-validation">
+                
                 <div class="mb-3">
                     <label for="username">Username</label>
                     <input type="text" id="username" th:field="${driver.username}" required>
@@ -54,7 +55,7 @@
                     <label for="admin">Admin Name</label>
                     <select th:field="${driver.admin}" required id="admin">
                         <option th:each="admin : ${admins}"
-                                th:value="${admin}"
+                                th:value="${admin.adminId}"
                                 th:text="${admin.firstname + ' ' + admin.lastname}">
                             
                         </option>
