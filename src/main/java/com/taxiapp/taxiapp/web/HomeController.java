@@ -16,4 +16,9 @@ public class HomeController {
     public String login() {
         return "login";
     }
+
+    @GetMapping("/admin")
+    public String panel() {
+        return "admin/panel";
+    }
 }

@@ -28,6 +28,7 @@ public class Driver {
     private String firstname;
     private String lastname;
     private String email;
+    private String password;
     private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -45,7 +46,7 @@ public class Driver {
     public Driver() {
     }
 
-    public Driver(String username, String firstname, String lastname, String email, String phoneNumber, Admin admin,
+    public Driver(String username, String firstname, String lastname, String email, String password ,String phoneNumber, Admin admin,
             Role role, Vehicle vehicle,
             List<Ride> rides) {
         this.username = username;
@@ -143,6 +144,14 @@ public class Driver {
     public String toString() {
         return "Driver [driverId=" + driverId + ", username=" + username + ", firtsname=" + firstname + ", lastname="
                 + lastname + ", email=" + email + ", phoneNumber=" + phoneNumber + ", role=" + role + "]";
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

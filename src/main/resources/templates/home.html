@@ -17,17 +17,17 @@
 
             <!-- Admin -->
             <div>
-                <a href="/admin/dashboard" class="btn btn-primary btn-lg">Go to Admin Panel</a>
+                <a th:href="@{/admin}" class="btn btn-primary btn-lg">Go to Admin Panel</a>
             </div>
 
             <!-- App User -->
             <div >
-                <a href="/user/rides" class="btn btn-success btn-lg">Book a Ride</a>
+                <a th:href="@{/user/profile}" class="btn btn-success btn-lg">Book a Ride</a>
             </div>
 
             <!-- Driver -->
             <div >
-                <a href="/driver/dashboard" class="btn btn-warning btn-lg">Driver Dashboard</a>
+                <a th:href="@{/driver/profile}" class="btn btn-warning btn-lg">Driver Dashboard</a>
             </div>
 
             <!-- Guest (not logged in) -->
