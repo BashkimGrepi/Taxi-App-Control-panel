@@ -21,19 +21,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "login").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/", "/login", "/home", "/guest/about", "h2-concole").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/admin/drivers/**").hasRole("ADMIN")
+                .requestMatchers("/admin/users/**").hasRole("ADMIN")
                 .requestMatchers("/driver/**").hasRole("DRIVER")
                 .requestMatchers("/user/**").hasRole("USER")
-                .requestMatchers("/home").hasAnyRole("ADMIN", "DRIVER", "USER")
+                .requestMatchers("/api/rides/**").hasAnyRole("USER", "DRIVER")
+
                 .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")
                         .defaultSuccessUrl("/home")
                         .permitAll())
-                .logout(logout -> logout
+                        .logout(logout -> logout
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
-                        .permitAll());
+                        .permitAll()                        
+                )
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+                        .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
 
         return http.build();
     }

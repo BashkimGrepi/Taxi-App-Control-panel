@@ -21,4 +21,11 @@ public class HomeController {
     public String panel() {
         return "admin/panel";
     }
+
+    @GetMapping("/guest/about")
+    public String about() {
+        return "guest/about";
+    }
+
+    
 }

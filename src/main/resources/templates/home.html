@@ -16,27 +16,32 @@
         <div class="d-flex justify-content-center flex-column align-items-center gap-3">
 
             <!-- Admin -->
-            <div>
+            <div sec:authorize="hasRole('ADMIN')">
                 <a th:href="@{/admin}" class="btn btn-primary btn-lg">Go to Admin Panel</a>
             </div>
 
             <!-- App User -->
-            <div >
-                <a th:href="@{/user/profile}" class="btn btn-success btn-lg">Book a Ride</a>
+            <div sec:authorize="hasRole('USER')" >
+                <a th:href="@{/user/profile}" class="btn btn-success btn-lg">Profile</a>
             </div>
-
+ 
             <!-- Driver -->
-            <div >
+            <div sec:authorize="hasRole('DRIVER')">
                 <a th:href="@{/driver/profile}" class="btn btn-warning btn-lg">Driver Dashboard</a>
             </div>
 
             <!-- Guest (not logged in) -->
-            <div >
-                <a href="/explore" class="btn btn-outline-secondary btn-lg">Continue as Guest</a>
-                <a href="/login" class="btn btn-outline-primary btn-lg">Login</a>
+            <div sec:authorize="!isAuthenticated()">
+                <a  th:href="@{/guest/about}" class="btn btn-outline-secondary btn-lg">What is TaxiApp?</a>
+                <a th:href="@{/login}" class="btn btn-outline-primary btn-lg">Login</a>
             </div>
 
         </div>
+
+        <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="mt-4">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit" class="btn btn-danger btn-lg mt-4">Logout</button>
+        </form>
     </div>
 
 </body>

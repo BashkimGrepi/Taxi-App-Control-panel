@@ -101,49 +101,5 @@ public class AdminController {
         return "admin/users";
     }
     
-    @GetMapping("/users/add")
-    public String addUser(Model model) {
-        model.addAttribute("user", new Driver());
-
-        Role[] roles = Role.values();
-        model.addAttribute("roles", roles);
-
-        model.addAttribute("admins", adminRepository.findAll());
-        return "admin/usersadd";
-    };
-
-    @PostMapping("/users/add")
-    public String addUser(@ModelAttribute User user) {
-        if (user.getUsername().isEmpty() || user.getEmail().isEmpty() || user.getPhoneNumber().isEmpty()) {
-            return "redirect:/admin/users";
-        }
-
-        userRepository.save(user);
-
-        return "redirect:/admin/users";
-    };
-
-    @GetMapping("/users/edit/{userId}")
-    public String updateUser(@PathVariable Long userId, Model model) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid User Id:" + userId));
-        model.addAttribute("user", user);
-        model.addAttribute("admins", adminRepository.findAll());
-        Role[] roles = Role.values();
-        model.addAttribute("roles", roles);
-        return "admin/edituser";
-    };
-
-    @PostMapping("/users/update")
-    public String updateUser(@ModelAttribute User user) {
-        userRepository.save(user);
-        return "redirect:/admin/users";
-    }
-
-    @GetMapping("/users/delete/{userId}")
-    public String deleteUser(@PathVariable Long userId) {
-        userRepository.deleteById(userId);
-        return "redirect:/admin/users";
-    };
     
 };
