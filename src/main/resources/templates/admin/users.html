@@ -28,7 +28,9 @@
                 <td th:text="${user.admin != null ? user.admin.firstname + ' ' + user.admin.lastname : 'None'}"></td>
                 <td th:text="${user.rides.size()}"></td>
                 <td>
-                    <a class="btn btn-danger" th:href="@{'/admin/users/delete' + ${userId}}">Delete</a>
+                    <form th:action="@{'/admin/users/delete/' + ${user.userId}}" method="post" th:object="${user}" style="display: inline;">
+                        <button class="btn btn-danger" >Delete</button>
+                    </form>
                     <a class="btn btn-secondary" th:href="@{'/admin/users/edit/' + ${user.userId}}">Edit</a>
                 </td>
             </tr>

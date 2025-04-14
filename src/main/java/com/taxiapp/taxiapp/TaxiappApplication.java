@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -28,16 +29,19 @@ public class TaxiappApplication {
 	}
 
 
+	
+
 	@Bean
 	public CommandLineRunner demoData(
 		AdminRepository adminRepository,
 		DriverRepository driverRepository,
 		UserRepository userRepository,
 		VehicleRepository vehicleRepository,
-		RideRepository rideRepository
+		RideRepository rideRepository,
+		PasswordEncoder passwordEncoder
 	) {
 
-		 PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
 		return (args) -> {
 			Admin admin = new Admin(
 				"Bashkim",
@@ -73,25 +77,26 @@ public class TaxiappApplication {
 			);
 			userRepository.save(user2);
 
-			Driver driver1 = new Driver(
+		Driver driver1 = new Driver(
                 "driver",
                 "Alice",
                 "Smith",
                 "dAliceSmith@taxiapp.com",
-                passwordEncoder.encode("driver"),
+                passwordEncoder.encode("kuljettaja"),
                 "+354847456",
                 admin,
                 Role.DRIVER,
                 null,
                 null
         );
+        driverRepository.save(driver1);
 
         Driver driver2 = new Driver(
                 "driver2",
                 "Bob",
                 "Johnson",
                 "Bob.johnson@taxiapp.com",
-                passwordEncoder.encode("password4"),
+                passwordEncoder.encode("kuljettaja2"),
                 "555654321",
                 admin,
                 Role.DRIVER,
@@ -99,7 +104,6 @@ public class TaxiappApplication {
                 null
         );
 
-		driverRepository.save(driver1);
 		driverRepository.save(driver2);
 
 		Vehicle vehicle1 = new Vehicle(

@@ -1,80 +1,90 @@
 package com.taxiapp.taxiapp.config;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 
 @Configuration
 public class SecurityConfig {
 
 
-    @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/home", "/guest/about", "h2-concole").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/admin/drivers/**").hasRole("ADMIN")
-                .requestMatchers("/admin/users/**").hasRole("ADMIN")
-                .requestMatchers("/driver/**").hasRole("DRIVER")
-                .requestMatchers("/user/**").hasRole("USER")
-                .requestMatchers("/api/rides/**").hasAnyRole("USER", "DRIVER")
+     
+        @Bean
+        public SecurityFilterChain configure(HttpSecurity http
+        ) throws Exception {
+                http.authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/", "/login", "/home", "/guest/**").permitAll()
+                                .requestMatchers("/h2-console/**").permitAll()
+                                .requestMatchers("/api/**").permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/driver/**").hasRole("DRIVER")
+                                .requestMatchers("/user/**").hasRole("USER")
+                                
 
-                .anyRequest().authenticated())
-                .formLogin(login -> login
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/home")
-                        .permitAll())
-                        .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()                        
-                )
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
-                        .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
+                                .anyRequest().authenticated())
 
-        return http.build();
-    }
-    
-    
+                                .formLogin(login -> login
+                                                .loginPage("/login")
+                                                .defaultSuccessUrl("/home", true)
+                                                .permitAll())
+                                .exceptionHandling(
+                                                ex -> ex
+                                                .defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED), new AntPathRequestMatcher("/api/**")))
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        List<UserDetails> users = new ArrayList<UserDetails>();
+                                .logout(logout -> logout
+                                                .logoutUrl("/logout")
+                                                .logoutSuccessUrl("/login?logout")
+                                                .permitAll());
 
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+                //for jwt authentication we need to disable the default session management
+                //and use stateless session management
 
-        UserDetails admin = User
-                .withUsername("admin")
-                .password(passwordEncoder.encode("admin"))
-                .roles("ADMIN")
-                .build();
-            
-        users.add(admin);
+                return http.build();
+        }
+        
+        @Bean
+        public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+                UserDetails user = org.springframework.security.core.userdetails.User
+                                .withUsername("user")
+                                .password(passwordEncoder.encode("user"))
+                                .roles("USER")
+                                .build();
+                UserDetails admin = org.springframework.security.core.userdetails.User
+                                .withUsername("admin")
+                                .password(passwordEncoder.encode("admin"))
+                                .roles("ADMIN")
+                                .build();
+                UserDetails driver = org.springframework.security.core.userdetails.User
+                                .withUsername("driver")
+                                .password(passwordEncoder.encode("driver"))
+                                .roles("DRIVER")
+                                .build();
 
-        UserDetails driver = User
-                .withUsername("driver")
-                .password(passwordEncoder.encode("driver"))
-                .roles("DRIVER")
-                .build();
-        users.add(driver);
+                        return new InMemoryUserDetailsManager(user, admin, driver);
+        }
+        
+                @Bean
+                public PasswordEncoder passwordEncoder() {
+                        return new BCryptPasswordEncoder();
+                }
 
-        UserDetails user = User
-                .withUsername("user")
-                .password(passwordEncoder.encode("user"))
-                .roles("USER")
-                .build();
-        users.add(user);
+        
 
-        return new InMemoryUserDetailsManager(users);
-    }
+
+ 
 }
+    
+    
+
+    

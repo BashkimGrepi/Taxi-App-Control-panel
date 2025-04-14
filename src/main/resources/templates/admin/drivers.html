@@ -36,8 +36,11 @@
                 <td th:text="${driver.admin != null ? driver.admin.firstname + ' ' + driver.admin.lastname : 'None'}"></td>
                 <td th:text="${driver.rides.size()}"></td>
                 <td th:text="${driver.vehicle != null ? driver.vehicle.licensePlate : 'None'}"></td>
+                
                 <td>
-                    <a class="btn btn-danger" th:href="@{'/admin/drivers/delete' + ${driverId}}">Delete</a>
+                    <form th:action="@{'/admin/drivers/delete/' + ${driver.driverId}}" method="post" th:object="${driver}" style="display: inline;">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
                     <a class="btn btn-secondary" th:href="@{'/admin/drivers/edit/' + ${driver.driverId}}">Edit</a>
                 </td>
             </tr>
